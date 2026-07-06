@@ -101,7 +101,7 @@ button { cursor: pointer; font-family: var(--font); }
 .view-name-dropdown { position: relative; display: inline-block; }
 .view-name-btn { display: flex; align-items: center; gap: 6px; padding: 0 10px; height: var(--h-control); border: 1px solid var(--color-stroke); border-radius: var(--r-md); background: white; font-size: var(--fs-sm); color: var(--color-text-default); width: min(360px, 92vw); justify-content: space-between; cursor: pointer; }
 .view-name-btn:hover, .view-name-dropdown[open] > .view-name-btn { background: var(--color-fill-hover); }
-.view-name-panel { position: absolute; top: calc(100% + 4px); left: 0; width: min(360px, 92vw); background: white; border: 1px solid var(--color-stroke); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,.12); z-index: 1000; overflow: hidden; }
+.view-name-panel { position: absolute; top: calc(100% + 4px); left: 0; width: min(360px, 92vw); background: white; border: 1px solid var(--color-stroke); border-radius: var(--r-md); box-shadow: 0 4px 20px rgba(0,0,0,.12); z-index: 1000; overflow: hidden; }
 .vh-sep { width: 1px; height: 22px; background: var(--color-stroke); margin: 0 4px; flex-shrink: 0; }
 .vh-icon-box { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
 .vh-icon-btn { width: 36px; height: 36px; padding: 0; border-radius: var(--r-md); border: 1px solid var(--color-stroke); background: white; display: flex; align-items: center; justify-content: center; color: var(--color-primary); transition: background .15s; cursor: pointer; }
@@ -196,6 +196,7 @@ tbody tr { transition: background .1s; }
 tbody tr:hover { background: #f5fbfe; }
 tbody tr.row-selected { background: #edf7ff; }
 td { padding: 0 10px; height: 40px; font-size: var(--fs-sm); color: var(--color-text-default); vertical-align: middle; white-space: nowrap; border-bottom: 1px solid var(--color-stroke); }
+tbody tr:last-child td { border-bottom: none; }
 .col-check { width: 60px; padding: 0; vertical-align: middle; }
 th.col-check { padding: 0 8px; }
 td.col-check { padding-left: 16px; }
