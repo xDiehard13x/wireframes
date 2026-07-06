@@ -101,7 +101,7 @@ button { cursor: pointer; font-family: var(--font); }
 .view-name-dropdown { position: relative; display: inline-block; }
 .view-name-btn { display: flex; align-items: center; gap: 6px; padding: 0 10px; height: var(--h-control); border: 1px solid var(--color-stroke); border-radius: var(--r-md); background: white; font-size: var(--fs-sm); color: var(--color-text-default); width: min(360px, 92vw); justify-content: space-between; cursor: pointer; }
 .view-name-btn:hover, .view-name-dropdown[open] > .view-name-btn { background: var(--color-fill-hover); }
-.view-name-panel { position: absolute; top: calc(100% + 4px); left: 0; width: min(360px, 92vw); background: white; border: 1px solid var(--color-stroke); border-radius: var(--r-md); box-shadow: 0 4px 20px rgba(0,0,0,.12); z-index: 1000; overflow: hidden; }
+.view-name-panel { position: absolute; top: 100%; left: 0; width: min(360px, 92vw); background: white; border: 1px solid var(--color-stroke); border-radius: var(--r-md); box-shadow: 0 4px 20px rgba(0,0,0,.12); z-index: 1000; overflow: hidden; }
 .vh-sep { width: 1px; height: 22px; background: var(--color-stroke); margin: 0 4px; flex-shrink: 0; }
 .vh-icon-box { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
 .vh-icon-btn { width: 36px; height: 36px; padding: 0; border-radius: var(--r-md); border: 1px solid var(--color-stroke); background: white; display: flex; align-items: center; justify-content: center; color: var(--color-primary); transition: background .15s; cursor: pointer; }
@@ -117,7 +117,7 @@ button { cursor: pointer; font-family: var(--font); }
 /* TABS */
 .tab-bar { display: flex; align-items: stretch; border-bottom: 1px solid var(--color-stroke); background: white; flex-shrink: 0; overflow-x: auto; overflow-y: visible; scrollbar-width: none; }
 .tab-bar::-webkit-scrollbar { display: none; }
-.tab { height: 44px; padding: 0 14px; font-family: 'Open Sans', system-ui, sans-serif; font-size: 13px; font-weight: 600; line-height: 20px; letter-spacing: .4px; text-transform: uppercase; color: #464646; border: none; background: transparent; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; display: inline-flex; align-items: center; gap: 0; transition: color .15s; cursor: pointer; }
+.tab { height: 44px; padding: 0 14px; font-family: 'Open Sans', system-ui, sans-serif; font-size: 13px; font-weight: 600; line-height: 20px; letter-spacing: .4px; text-transform: uppercase; color: #464646; border: none; background: transparent; border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap; display: inline-flex; align-items: center; gap: 0; transition: color .15s; cursor: pointer; }
 .tab:hover { color: var(--color-text-default); }
 .tab.active { color: #464646; border-bottom-color: var(--color-brand-purple); font-weight: 600; }
 .tab-count { color: inherit; font-size: inherit; font-weight: inherit; }
@@ -211,7 +211,7 @@ td.col-check { padding-left: 16px; }
 .select-all-dropdown { position: relative; display: flex; height: 100%; }
 .select-all-chevron { display: flex; align-items: center; justify-content: center; padding: 0 10px; height: 100%; background: transparent; cursor: pointer; color: var(--color-primary); transition: background .12s; flex-shrink: 0; border-radius: 0 var(--r-md) var(--r-md) 0; }
 .select-all-chevron:hover, .select-all-dropdown[open] .select-all-chevron { background: var(--color-fill-hover); }
-.select-all-menu { position: absolute; top: calc(100% + 2px); left: 0; background: white; border: 1px solid var(--color-stroke); border-radius: var(--r-md); box-shadow: var(--shadow-md); min-width: 180px; z-index: 200; overflow: hidden; }
+.select-all-menu { position: absolute; top: 100%; left: -41px; background: white; border: 1px solid var(--color-stroke); border-radius: var(--r-md); box-shadow: var(--shadow-md); min-width: 180px; z-index: 200; overflow: hidden; }
 .select-all-menu .menu-item { display: block; width: 100%; padding: 9px 14px; font-size: var(--fs-sm); color: var(--color-text-default); background: none; border: none; text-align: left; cursor: pointer; transition: background .1s; }
 .select-all-menu .menu-item:hover { background: var(--color-fill-hover); }
 .col-os { width: 56px; padding: 0 4px 0 10px; }
@@ -1237,8 +1237,8 @@ const DIALOGS = {
         <div id="dlg-install-hint" class="${row.rebootRequired ? 'dlg-warn-box' : 'dlg-info-box'}">${row.rebootRequired ? '⚠ This patch requires a reboot to complete installation.' : 'Patch installation command will be queued to the agent.'}</div>
         <div id="dlg-custom-dt" style="display:none">
           <div class="dlg-date-row">
-            <div class="dlg-field"><label class="dlg-label">On</label><input type="date" class="dlg-input" id="dlg-date" name="dlg-date" value="2026-07-02"></div>
-            <div class="dlg-field"><label class="dlg-label">At</label><input type="time" class="dlg-input" id="dlg-time" name="dlg-time" value="23:00"></div>
+            <div class="dlg-field"><label class="dlg-label" for="dlg-date">On</label><input type="date" class="dlg-input" id="dlg-date" name="dlg-date" value="2026-07-02"></div>
+            <div class="dlg-field"><label class="dlg-label" for="dlg-time">At</label><input type="time" class="dlg-input" id="dlg-time" name="dlg-time" value="23:00"></div>
           </div>
         </div>
       </div>
@@ -1271,7 +1271,7 @@ const DIALOGS = {
         </div>
         <div class="dlg-collapsible-body" id="dlg-user-opts-body" style="display:none">
           <div class="dlg-field">
-            <label class="dlg-label">Reboot countdown timer</label>
+            <label class="dlg-label" for="dlg-reboot-timer">Reboot countdown timer</label>
             <select class="dlg-select" id="dlg-reboot-timer" name="dlg-reboot-timer">
               <option>No timer</option>
               <option>5 minutes</option>
@@ -1279,6 +1279,24 @@ const DIALOGS = {
               <option>30 minutes</option>
               <option>1 hour</option>
             </select>
+          </div>
+        </div>
+      </div>
+      <div class="dlg-divider"></div>
+      <div class="dlg-section">
+        <div class="dlg-section-title">Retry installation</div>
+        <div class="dlg-toggle-row">
+          <button class="dlg-toggle" id="dlg-t-retry" onclick="dlgToggle('dlg-t-retry', dlgRetryChange)"><span class="dlg-toggle-knob"></span><span class="dlg-toggle-text">OFF</span></button>
+          <div class="dlg-toggle-info">
+            <div class="dlg-toggle-label">Enable retry</div>
+            <div class="dlg-toggle-desc">If patches aren't fully installed, the system will retry at regular intervals.</div>
+            <div class="dlg-toggle-sub" id="dlg-retry-sub" style="display:none">
+              <div class="dlg-field"><label class="dlg-label" for="dlg-retry-freq">Repeat</label>
+                <select class="dlg-select" id="dlg-retry-freq" name="dlg-retry-freq" style="max-width:220px">
+                  <option>Daily</option><option>Weekly</option><option>Monthly</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
       </div>`
@@ -1292,7 +1310,7 @@ const DIALOGS = {
     body: () => `
       <div class="dlg-section">
         <div class="dlg-date-row">
-          <div class="dlg-field"><label class="dlg-label">Frequency</label>
+          <div class="dlg-field"><label class="dlg-label" for="dlg-win-freq">Frequency</label>
             <select id="dlg-win-freq" name="dlg-win-freq" class="dlg-select" onchange="dlgWinFreqChange(this.value)">
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
@@ -1300,11 +1318,11 @@ const DIALOGS = {
               <option value="custom">Custom</option>
             </select>
           </div>
-          <div class="dlg-field"><label class="dlg-label">Start date</label><input type="date" class="dlg-input" id="dlg-win-date" name="dlg-win-date" value="2026-07-02"></div>
+          <div class="dlg-field"><label class="dlg-label" for="dlg-win-date">Start date</label><input type="date" class="dlg-input" id="dlg-win-date" name="dlg-win-date" value="2026-07-02"></div>
         </div>
         <div class="dlg-date-row">
-          <div class="dlg-field"><label class="dlg-label">Between</label><input type="time" class="dlg-input" id="dlg-win-start" name="dlg-win-start" value="22:00"></div>
-          <div class="dlg-field"><label class="dlg-label">And</label><input type="time" class="dlg-input" id="dlg-win-end" name="dlg-win-end" value="06:00"></div>
+          <div class="dlg-field"><label class="dlg-label" for="dlg-win-start">Between</label><input type="time" class="dlg-input" id="dlg-win-start" name="dlg-win-start" value="22:00"></div>
+          <div class="dlg-field"><label class="dlg-label" for="dlg-win-end">And</label><input type="time" class="dlg-input" id="dlg-win-end" name="dlg-win-end" value="06:00"></div>
         </div>
         <!-- frequency-specific extras -->
         <div id="dlg-win-extras"></div>
@@ -1337,7 +1355,7 @@ const DIALOGS = {
     successSub: row => `${row.patchName} will not be deployed.`,
     body: () => `
       <div class="dlg-warn-box">Declined patches will be hidden from the available list and will not be automatically deployed. You can re-approve a patch at any time.</div>
-      <div class="dlg-field"><label class="dlg-label">Reason <span class="dlg-optional">(optional)</span></label><textarea class="dlg-textarea" rows="3" placeholder="Explain why this patch is being declined…"></textarea></div>`
+      <div class="dlg-field"><label class="dlg-label" for="dlg-decline-reason">Reason <span class="dlg-optional">(optional)</span></label><textarea class="dlg-textarea" id="dlg-decline-reason" rows="3" placeholder="Explain why this patch is being declined…"></textarea></div>`
   },
   ViewDetails: {
     title: 'Patch details',
@@ -1345,13 +1363,13 @@ const DIALOGS = {
     confirmLabel: 'Close',
     successTitle: null,
     body: row => `
-      <div class="dlg-field"><label class="dlg-label">Published</label><div>${row.publishDate}</div></div>
-      <div class="dlg-field"><label class="dlg-label">Severity</label>${getSevTag(row.severity)}</div>
-      <div class="dlg-field"><label class="dlg-label">CVSS score</label><span class="cvss-score ${getCvssClass(row.severity)}">${row.cvss.toFixed(1)}</span></div>
-      <div class="dlg-field"><label class="dlg-label">Classification</label><div>${row.classification}</div></div>
-      <div class="dlg-field"><label class="dlg-label">Product</label><div>${row.product}</div></div>
-      <div class="dlg-field"><label class="dlg-label">Reboot required</label><div>${row.rebootRequired?'Yes':'No'}</div></div>
-      <div class="dlg-field"><label class="dlg-label">Eligible assets</label><div>${row.eligibleAssets}</div></div>`
+      <div class="dlg-field"><span class="dlg-label">Published</span><div>${row.publishDate}</div></div>
+      <div class="dlg-field"><span class="dlg-label">Severity</span>${getSevTag(row.severity)}</div>
+      <div class="dlg-field"><span class="dlg-label">CVSS score</span><span class="cvss-score ${getCvssClass(row.severity)}">${row.cvss.toFixed(1)}</span></div>
+      <div class="dlg-field"><span class="dlg-label">Classification</span><div>${row.classification}</div></div>
+      <div class="dlg-field"><span class="dlg-label">Product</span><div>${row.product}</div></div>
+      <div class="dlg-field"><span class="dlg-label">Reboot required</span><div>${row.rebootRequired?'Yes':'No'}</div></div>
+      <div class="dlg-field"><span class="dlg-label">Eligible assets</span><div>${row.eligibleAssets}</div></div>`
   },
   Exclude: {
     title: 'Exclude from policy',
@@ -1361,7 +1379,7 @@ const DIALOGS = {
     successSub: row => `${row.patchName} has been excluded from policy.`,
     body: () => `
       <div class="dlg-warn-box">Excluded patches are permanently ignored by all policies. This affects all customers and sites.</div>
-      <div class="dlg-field"><label class="dlg-label">Reason</label><textarea class="dlg-textarea" rows="3" placeholder="Explain the exclusion reason…"></textarea></div>`
+      <div class="dlg-field"><label class="dlg-label" for="dlg-exclude-reason">Reason</label><textarea class="dlg-textarea" id="dlg-exclude-reason" rows="3" placeholder="Explain the exclusion reason…"></textarea></div>`
   }
 };
 
