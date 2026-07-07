@@ -1,3 +1,297 @@
 <!DOCTYPE html>
-<html><head><title>Wireframes</title></head>
-<body><h1>Wireframes</h1><p>Projects will appear here.</p></body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wireframe Registry</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --bg: #0f1117; --surface: #1a1d2e; --surface2: #222538;
+      --border: #2a2d3e; --text: #e2e8f0; --muted: #64748b;
+      --accent: #6366f1; --success: #10b981; --danger: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem; }
+    header { display: flex; align-items: flex-start; justify-content: space-between;
+             margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem; }
+    header h1 { font-size: 1.25rem; font-weight: 600; }
+    header p  { font-size: .8rem; color: var(--muted); margin-top: .3rem; }
+    .meta-row { display: flex; align-items: center; gap: .75rem; }
+    .btn { padding: .45rem .9rem; border-radius: 8px; border: none; font-size: .8rem;
+           font-weight: 500; cursor: pointer; transition: all .15s; }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+    .last-updated { font-size: .75rem; color: var(--muted); }
+
+    /* Search */
+    .search-bar { margin-bottom: 1.5rem; }
+    .search-bar input {
+      width: 100%; max-width: 360px; background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); padding: .55rem .85rem; border-radius: 8px; font-size: .875rem; outline: none;
+    }
+    .search-bar input:focus { border-color: var(--accent); }
+    .search-bar input::placeholder { color: var(--muted); }
+
+    /* Designer groups */
+    .designer-group { margin-bottom: 2rem; }
+    .designer-header {
+      display: flex; align-items: center; gap: .6rem;
+      margin-bottom: .75rem; padding-bottom: .5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .designer-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--accent); display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .designer-name { font-weight: 600; font-size: .95rem; }
+    .designer-count { font-size: .73rem; color: var(--muted);
+                      background: var(--surface2); border: 1px solid var(--border);
+                      border-radius: 99px; padding: .1rem .45rem; }
+    .designer-updated { font-size: .72rem; color: var(--muted); margin-left: auto; }
+
+    /* Project cards */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: .75rem;
+    }
+    .project-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem 1.1rem;
+      display: flex; flex-direction: column; gap: .4rem;
+      transition: border-color .15s;
+    }
+    .project-card:hover { border-color: var(--accent); }
+    .project-card-name { font-weight: 600; font-size: .875rem; }
+    .project-card-id   { font-size: .7rem; color: var(--muted); font-family: monospace; }
+    .project-card-url  {
+      font-size: .72rem; font-family: monospace; color: var(--accent);
+      word-break: break-all; text-decoration: none;
+    }
+    .project-card-url:hover { text-decoration: underline; }
+    .project-card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: .35rem;
+    }
+    .project-card-time { font-size: .72rem; color: var(--muted); }
+    .card-actions { display: flex; gap: .35rem; }
+    .copy-btn {
+      background: transparent; border: 1px solid var(--border); cursor: pointer;
+      color: var(--muted); padding: .3rem .5rem; border-radius: 6px;
+      font-size: .72rem; transition: all .15s; display: flex; align-items: center; gap: .25rem;
+    }
+    .copy-btn:hover { color: var(--text); border-color: var(--muted); }
+    .open-btn {
+      background: var(--accent); border: none; cursor: pointer; color: #fff;
+      padding: .3rem .6rem; border-radius: 6px; font-size: .72rem;
+      text-decoration: none; display: flex; align-items: center; gap: .25rem;
+      transition: opacity .15s;
+    }
+    .open-btn:hover { opacity: .85; }
+
+    /* States */
+    .loading { text-align: center; color: var(--muted); padding: 4rem; }
+    .empty   { text-align: center; color: var(--muted); padding: 4rem; }
+    .toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: var(--surface); border: 1px solid var(--success); color: var(--success);
+      padding: .6rem 1.1rem; border-radius: 10px; font-size: .85rem; z-index: 200;
+      animation: slideIn .2s ease;
+    }
+    @keyframes slideIn { from { transform: translateY(6px); opacity: 0; }
+                         to   { transform: translateY(0);   opacity: 1; } }
+    .hidden { display: none !important; }
+
+    /* No-results banner */
+    .no-results { color: var(--muted); padding: 1.5rem 0; font-size: .875rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>&#128208; Wireframe Registry</h1>
+      <p>All designer projects &mdash; read-only. Last refreshed: <span id="refresh-time">—</span></p>
+    </div>
+    <div class="meta-row">
+      <span class="last-updated" id="total-count"></span>
+      <button class="btn btn-ghost" onclick="loadRegistry()">&#8635; Refresh</button>
+    </div>
+  </header>
+
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search projects or designers…" oninput="filterRender()">
+  </div>
+
+  <div id="content"><p class="loading">Loading registry…</p></div>
+
+  <script>
+    // ── Config ────────────────────────────────────────────────────────────────
+    // Set these to match your GitHub org/user and repo.
+    // The registry files live at: registry/<designer-username>.json
+    const GITHUB_USER = 'xDiehard13x';
+    const GITHUB_REPO = 'wireframes';
+    const RAW_BASE    = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main`;
+    const API_BASE    = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}`;
+
+    let allDesigners = [];  // [{ designer, updated, projects: {id: {...}} }]
+
+    // ── Load ──────────────────────────────────────────────────────────────────
+    async function loadRegistry() {
+      document.getElementById('content').innerHTML = '<p class="loading">Loading registry…</p>';
+      try {
+        // List all files in /registry/
+        const res = await fetch(`${API_BASE}/contents/registry`, {
+          headers: { 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (!res.ok) {
+          document.getElementById('content').innerHTML =
+            '<p class="empty">No registry found yet. Push a project first.</p>';
+          return;
+        }
+        const files = await res.json();
+        const jsonFiles = files.filter(f => f.name.endsWith('.json'));
+
+        // Fetch each designer's manifest in parallel
+        const manifests = await Promise.all(
+          jsonFiles.map(f =>
+            fetch(`${RAW_BASE}/registry/${f.name}?t=${Date.now()}`)
+              .then(r => r.ok ? r.json() : null)
+              .catch(() => null)
+          )
+        );
+
+        allDesigners = manifests
+          .filter(Boolean)
+          .sort((a, b) => a.designer.localeCompare(b.designer));
+
+        document.getElementById('refresh-time').textContent = new Date().toLocaleTimeString();
+        const total = allDesigners.reduce((n, d) => n + Object.keys(d.projects).length, 0);
+        document.getElementById('total-count').textContent =
+          `${allDesigners.length} designer${allDesigners.length !== 1 ? 's' : ''} · ${total} project${total !== 1 ? 's' : ''}`;
+
+        filterRender();
+      } catch (e) {
+        document.getElementById('content').innerHTML =
+          `<p class="empty">Failed to load registry: ${e.message}</p>`;
+      }
+    }
+
+    // ── Render ────────────────────────────────────────────────────────────────
+    function filterRender() {
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const el = document.getElementById('content');
+
+      if (!allDesigners.length) {
+        el.innerHTML = '<p class="empty">No designers found in registry.</p>';
+        return;
+      }
+
+      let html = '';
+      let matchCount = 0;
+
+      for (const d of allDesigners) {
+        const matchesDesigner = !q || d.designer.toLowerCase().includes(q);
+        const entries = Object.entries(d.projects).filter(([id, p]) => {
+          if (!q) return true;
+          return matchesDesigner
+            || id.toLowerCase().includes(q)
+            || (p.display_name || '').toLowerCase().includes(q)
+            || (p.github_url  || '').toLowerCase().includes(q);
+        });
+
+        if (!entries.length) continue;
+        matchCount += entries.length;
+
+        const initials = d.designer.slice(0, 2).toUpperCase();
+        const relTime  = rel(d.updated);
+
+        html += `
+          <div class="designer-group">
+            <div class="designer-header">
+              <div class="designer-avatar">${initials}</div>
+              <span class="designer-name">${esc(d.designer)}</span>
+              <span class="designer-count">${entries.length}</span>
+              <span class="designer-updated">Updated ${relTime}</span>
+            </div>
+            <div class="project-grid">
+              ${entries.map(([id, p]) => projectCard(id, p)).join('')}
+            </div>
+          </div>`;
+      }
+
+      if (!html) {
+        el.innerHTML = `<p class="no-results">No results for &ldquo;${esc(q)}&rdquo;</p>`;
+        return;
+      }
+      el.innerHTML = html;
+    }
+
+    function projectCard(id, p) {
+      const name = p.display_name || id;
+      const url  = p.github_url || '';
+      const time = rel(p.last_pushed);
+      return `
+        <div class="project-card">
+          <div class="project-card-name">${esc(name)}</div>
+          <div class="project-card-id">${esc(id)}</div>
+          ${url ? `<a class="project-card-url" href="${url}" target="_blank">${esc(url)}</a>` : ''}
+          <div class="project-card-footer">
+            <span class="project-card-time">${time ? 'Pushed ' + time : 'Not pushed'}</span>
+            <div class="card-actions">
+              ${url ? `
+                <button class="copy-btn" onclick="copyUrl(this.dataset.u)" data-u="${url}"
+                  title="Copy link">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                  </svg>
+                  Copy
+                </button>
+                <a class="open-btn" href="${url}" target="_blank">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <polyline points="15 3 21 3 21 9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                  </svg>
+                  Open
+                </a>` : ''}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    function rel(iso) {
+      if (!iso) return '';
+      const s = (Date.now() - new Date(iso)) / 1000;
+      if (s < 60)    return 'just now';
+      if (s < 3600)  return Math.floor(s / 60) + 'm ago';
+      if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+      return Math.floor(s / 86400) + 'd ago';
+    }
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    async function copyUrl(text) {
+      try { await navigator.clipboard.writeText(text); }
+      catch {
+        const el = Object.assign(document.createElement('textarea'), { value: text });
+        document.body.appendChild(el); el.select(); document.execCommand('copy');
+        document.body.removeChild(el);
+      }
+      const t = Object.assign(document.createElement('div'), {
+        className: 'toast', textContent: 'Copied!'
+      });
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2500);
+    }
+
+    loadRegistry();
+  </script>
+</body>
+</html>
