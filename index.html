@@ -78,6 +78,13 @@
     }
     .project-card-time { font-size: .72rem; color: var(--muted); }
     .card-actions { display: flex; gap: .35rem; }
+    .epic-tag {
+      display: inline-flex; align-items: center; font-size: .66rem; font-weight: 600;
+      font-family: monospace; padding: .15rem .4rem; border-radius: 4px;
+      background: rgba(99,102,241,.12); color: #818cf8;
+      border: 1px solid rgba(99,102,241,.25); text-decoration: none; letter-spacing: .02em;
+    }
+    .epic-tag:hover { background: rgba(99,102,241,.22); }
     .copy-btn {
       background: transparent; border: 1px solid var(--border); cursor: pointer;
       color: var(--muted); padding: .3rem .5rem; border-radius: 6px;
@@ -233,10 +240,14 @@
       const name = p.display_name || id;
       const url  = p.github_url || '';
       const time = rel(p.last_pushed);
+      const epic = p.epic_url || '';
       return `
         <div class="project-card">
           <div class="project-card-name">${esc(name)}</div>
-          <div class="project-card-id">${esc(id)}</div>
+          <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-top:.15rem">
+            <div class="project-card-id">${esc(id)}</div>
+            ${epicTag(epic)}
+          </div>
           ${url ? `<a class="project-card-url" href="${url}" target="_blank">${esc(url)}</a>` : ''}
           <div class="project-card-footer">
             <span class="project-card-time">${time ? 'Pushed ' + time : 'Not pushed'}</span>
@@ -266,6 +277,13 @@
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
+    function epicTag(url) {
+      if (!url) return '';
+      const m = url.match(/\/browse\/([A-Z]+-\d+)/i);
+      const label = m ? m[1].toUpperCase() : 'Epic';
+      return `<a href="${esc(url)}" target="_blank" class="epic-tag" title="Open in Jira">${label}</a>`;
+    }
+
     function rel(iso) {
       if (!iso) return '';
       const s = (Date.now() - new Date(iso)) / 1000;
