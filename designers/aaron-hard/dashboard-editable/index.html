@@ -4,14 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
-  <!-- apex-spec-version: 1.1 -->
-  <!--
-    APEX CHROME NOTE: This dashboard view is designed to nest inside the Apex product chrome
-    (48px product bar + 184px left nav). The .topbar here is an in-view sub-header, not the
-    global product bar. When integrating, remove .topbar position:fixed and let Apex chrome
-    control the top offset.
-  -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     :root {
@@ -41,29 +33,29 @@
       --metrics-row-h:      100px;
     }
     body.light {
-      --bg: #f5f6fa;
+      --bg: #eef0f5;
       --surface: #ffffff;
-      --surface-2: #f8f8f8;
-      --border: #d5d5d5;
-      --border-light: #d5d5d5;
-      --text: #111111;
-      --text-muted: #8d8d99;
-      --text-link: #0079aa;
+      --surface-2: #f3f4f8;
+      --border: #e2e5ef;
+      --border-light: #cbd0e0;
+      --text: #111827;
+      --text-muted: #6b7280;
+      --text-link: #2563eb;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      overflow: clip;
+      overflow: hidden;
       transition: background 0.2s;
     }
 
     /* ── TOPBAR (always dark) ── */
     .topbar {
       display: flex; align-items: center; justify-content: space-between;
-      height: 48px; padding: 0 16px;
+      height: 52px; padding: 0 16px;
       background: #161b27; border-bottom: 1px solid #2d3452;
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
     }
@@ -76,7 +68,7 @@
     .view-btn {
       display: flex; align-items: center; justify-content: space-between; gap: 6px;
       background: #1e2537; border: 1px solid #2d3452; color: #e6e8f0;
-      padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500;
+      padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500;
       min-width: 0;
     }
     .view-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -93,9 +85,7 @@
       border-radius: 8px; min-width: 240px; display: none;
       box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 300; overflow: hidden;
     }
-    details[open] > .view-menu { display: block; }
-    summary.view-btn { list-style: none; }
-    summary.view-btn::-webkit-details-marker { display: none; }
+    .view-menu.open { display: block; }
     .view-menu-label {
       font-size: 10px; font-weight: 600; color: var(--text-muted);
       text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 12px 4px;
@@ -112,7 +102,7 @@
     .view-menu-divider { height: 1px; background: var(--border); margin: 4px 0; }
 
     .btn {
-      padding: 6px 12px; border-radius: 4px; font-size: 13px;
+      padding: 6px 12px; border-radius: 6px; font-size: 13px;
       font-weight: 500; cursor: pointer; border: 1px solid transparent; transition: all 0.15s;
     }
     .btn-outline { background: transparent; border-color: #3a4166; color: #e6e8f0; }
@@ -125,7 +115,7 @@
     body.editing .btn-edit-mode { background: #2563eb !important; border-color: #2563eb !important; color: #fff !important; }
 
     .theme-toggle {
-      background: none; border: 1px solid #3a4166; border-radius: 4px;
+      background: none; border: 1px solid #3a4166; border-radius: 6px;
       color: #8892aa; cursor: pointer; padding: 5px 8px;
       display: flex; align-items: center; gap: 5px; font-size: 12px;
     }
@@ -136,7 +126,7 @@
     .edit-mode-bar {
       display: none; background: #1d3461; border-bottom: 1px solid #2a4a8a;
       padding: 0 16px; height: 44px; align-items: center; gap: 16px;
-      position: fixed; top: 48px; left: 0; right: 0; z-index: 190;
+      position: fixed; top: 52px; left: 0; right: 0; z-index: 190;
     }
     body.editing .edit-mode-bar { display: flex; }
     .edit-mode-label {
@@ -163,13 +153,13 @@
     .edit-modules-btn {
       display: flex; align-items: center; gap: 6px;
       background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-      color: #93c5fd; padding: 5px 12px; border-radius: 4px;
+      color: #93c5fd; padding: 5px 12px; border-radius: 6px;
       font-size: 13px; font-weight: 500; cursor: pointer;
     }
     .edit-modules-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
     .edit-done-btn {
       background: #2563eb; color: #fff; border: none;
-      padding: 6px 16px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer;
+      padding: 6px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;
     }
     .edit-done-btn:hover { background: #1d4ed8; }
 
@@ -178,7 +168,7 @@
       padding: var(--dashboard-pad-v) var(--dashboard-pad-h);
       display: flex; flex-direction: column;
       gap: var(--widget-gap);
-      position: fixed; top: 48px; left: 0; right: 0; bottom: 0;
+      position: fixed; top: 52px; left: 0; right: 0; bottom: 0;
       overflow-y: auto;
       overflow-y: overlay;
     }
@@ -242,7 +232,7 @@
     /* Add section button */
     .add-section-btn {
       display: none; width: 100%; padding: 6px;
-      border: 1.5px dashed var(--border); border-radius: 4px;
+      border: 1.5px dashed var(--border); border-radius: 6px;
       font-size: 12px; color: var(--text-muted); cursor: pointer;
       background: none; text-align: center; transition: all 0.15s;
     }
@@ -252,7 +242,7 @@
     /* ── WIDGET ── */
     .widget {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 4px; display: flex; flex-direction: column;
+      border-radius: 8px; display: flex; flex-direction: column;
       position: relative; overflow: hidden;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
@@ -489,7 +479,7 @@
     .date-dropdown { position: relative; }
     .date-menu { min-width: 280px; padding: 10px; }
     .date-presets-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 10px; }
-    .date-preset-btn { background: var(--surface-2); border: 1.5px solid transparent; color: var(--text-muted); font-size: 12px; font-weight: 500; padding: 6px 10px; border-radius: 4px; cursor: pointer; text-align: left; font-family: inherit; transition: all 0.12s; white-space: nowrap; }
+    .date-preset-btn { background: var(--surface-2); border: 1.5px solid transparent; color: var(--text-muted); font-size: 12px; font-weight: 500; padding: 6px 10px; border-radius: 6px; cursor: pointer; text-align: left; font-family: inherit; transition: all 0.12s; white-space: nowrap; }
     .date-preset-btn:hover { border-color: var(--border); color: var(--text); }
     .date-preset-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(79,142,247,0.08); }
     .date-custom-wrap { border-top: 1px solid var(--border); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
@@ -499,7 +489,7 @@
     body.light .date-input { color-scheme: light; }
     .date-input:focus { border-color: var(--accent); }
     .date-custom-row span { font-size: 11px; color: var(--text-muted); flex-shrink: 0; }
-    .date-apply-btn { width: 100%; padding: 7px; background: var(--accent); border: none; border-radius: 4px; color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .date-apply-btn { width: 100%; padding: 7px; background: var(--accent); border: none; border-radius: 6px; color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
     .date-apply-btn:hover { background: #3a7ef5; }
     .cust-menu { min-width: 260px; }
     .cust-regions { display: flex; gap: 4px; padding: 8px 8px 6px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
@@ -1255,11 +1245,11 @@
 <header class="topbar">
   <div class="topbar-left">
     <span class="topbar-title">View</span>
-    <details class="view-dropdown" id="viewDropdown">
-      <summary class="view-btn">
+    <div class="view-dropdown" id="viewDropdown">
+      <button class="view-btn" onclick="toggleViewMenu()">
         <span id="viewBtnLabel">Patches</span>
         <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
-      </summary>
+      </button>
       <div class="view-menu" id="viewMenu">
         <div class="view-menu-label">Default Views</div>
         <div class="view-menu-item active" data-view="patches" onclick="switchView('patches')">Security Dashboard <span class="active-dot"></span></div>
@@ -1286,14 +1276,14 @@
           </button>
         </div>
       </div>
-    </details>
+    </div>
     <div class="topbar-sep"></div>
     <span class="topbar-title">Customer</span>
-    <details class="cust-dropdown" id="custDropdown">
-      <summary class="view-btn">
+    <div class="cust-dropdown" id="custDropdown">
+      <button class="view-btn" onclick="toggleCustMenu()">
         <span id="custBtnLabel">All Customers</span>
         <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
-      </summary>
+      </button>
       <div class="view-menu cust-menu" id="custMenu">
         <div class="cust-regions" id="custRegionTabs"></div>
         <div class="cust-search-wrap">
@@ -1301,19 +1291,19 @@
         </div>
         <div id="custList"></div>
       </div>
-    </details>
+    </div>
     <button class="cust-reset-btn" id="custResetBtn" onclick="resetCustFilter()" style="display:none">Reset</button>
   </div>
   <div class="topbar-right">
     <button class="cust-reset-btn" id="dateResetBtn" onclick="resetDateRange()" style="display:none">Reset</button>
-    <details class="date-dropdown" id="dateDropdown">
-      <summary class="view-btn" style="width:auto;min-width:160px;">
+    <div class="date-dropdown" id="dateDropdown">
+      <button class="view-btn" onclick="toggleDateMenu()" style="width:auto;min-width:160px;">
         <svg viewBox="0 0 20 20" fill="currentColor" style="width:14px;height:14px;flex-shrink:0;color:#8892aa"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
         <span id="dateBtnLabel">Last 30 days</span>
         <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
-      </summary>
+      </button>
       <div class="view-menu date-menu" id="dateMenu" style="right:0;left:auto;"></div>
-    </details>
+    </div>
     <span class="topbar-meta">Last updated: Jun 17, 2026, 09:41</span>
     <button class="theme-toggle" onclick="renderDashboard();showToast('Dashboard refreshed')" title="Refresh">
       <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/></svg>
@@ -3724,33 +3714,26 @@ function saveEditMode() {
 // VIEW SELECTOR
 // ═══════════════════════════════════════════════════
 function closeAllMenus() {
-  document.getElementById('viewDropdown')?.removeAttribute('open');
-  document.getElementById('custDropdown')?.removeAttribute('open');
-  document.getElementById('dateDropdown')?.removeAttribute('open');
+  document.getElementById('viewMenu')?.classList.remove('open');
+  document.getElementById('custMenu')?.classList.remove('open');
+  document.getElementById('dateMenu')?.classList.remove('open');
 }
 
-// Dropdowns are <details>/<summary> — toggle is handled natively.
-// The toggle event listeners below handle mutual exclusion and side-effects.
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('viewDropdown')?.addEventListener('toggle', function() {
-    if (!this.open) return;
-    document.getElementById('custDropdown')?.removeAttribute('open');
-    document.getElementById('dateDropdown')?.removeAttribute('open');
-  });
-  document.getElementById('custDropdown')?.addEventListener('toggle', function() {
-    if (!this.open) return;
-    document.getElementById('viewDropdown')?.removeAttribute('open');
-    document.getElementById('dateDropdown')?.removeAttribute('open');
+function toggleViewMenu() {
+  document.getElementById('custMenu')?.classList.remove('open');
+  document.getElementById('viewMenu').classList.toggle('open');
+}
+
+function toggleCustMenu() {
+  const menu = document.getElementById('custMenu');
+  const isOpen = menu.classList.contains('open');
+  closeAllMenus();
+  if (!isOpen) {
+    menu.classList.add('open');
     renderCustMenu();
     setTimeout(() => document.getElementById('custSearch')?.focus(), 50);
-  });
-  document.getElementById('dateDropdown')?.addEventListener('toggle', function() {
-    if (!this.open) return;
-    document.getElementById('viewDropdown')?.removeAttribute('open');
-    document.getElementById('custDropdown')?.removeAttribute('open');
-    renderDateMenu();
-  });
-});
+  }
+}
 
 function updateCustBtnLabel() {
   const c = CUSTOMERS.find(x => x.id === state.currentCustomer) || CUSTOMERS[0];
@@ -3817,6 +3800,13 @@ function selectCustomer(id) {
 }
 
 // ── DATE RANGE UI ──────────────────────────────────
+function toggleDateMenu() {
+  const menu = document.getElementById('dateMenu');
+  const isOpen = menu.classList.contains('open');
+  closeAllMenus();
+  if (!isOpen) { menu.classList.add('open'); renderDateMenu(); }
+}
+
 function renderDateMenu() {
   const dr = state.dateRange;
   const presetBtns = DATE_PRESETS.map(p => `
