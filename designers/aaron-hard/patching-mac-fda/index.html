@@ -1253,6 +1253,7 @@ const DIALOGS = {
         </div>
       </div>
       <div class="dlg-divider"></div>
+      ${row.os !== 'linux' ? `
       <div class="dlg-section">
         <div class="dlg-section-title">Asset reboot</div>
         <div class="dlg-toggle-row">
@@ -1263,6 +1264,12 @@ const DIALOGS = {
           </div>
         </div>
       </div>
+      ` : `
+      <div class="dlg-section">
+        <div class="dlg-section-title">Asset reboot</div>
+        <div class="dlg-info-box">Asset reboot is not supported for Linux devices.</div>
+      </div>
+      `}
       <div class="dlg-collapsible" id="dlg-user-opts-wrap" style="display:none">
         <div class="dlg-collapsible-hdr" id="dlg-user-opts-hdr" onclick="dlgCollapsible('dlg-user-opts-hdr','dlg-user-opts-body')">
           User options
@@ -1396,6 +1403,7 @@ function rowAction(e, action, id) {
     showPermDialog(row, action);
     return;
   }
+
 
   const cfg = DIALOGS[action];
   if (!cfg) return;
@@ -1598,6 +1606,17 @@ function getFilteredData() {
 // BULK ACTIONS
 // ============================================================
 function bulkAction(label) {
+  if (label === 'Install patches') {
+    const linuxCount = [...selectedIds].filter(id => {
+      const row = DATA.patches.find(r => r.id === id);
+      return row && row.os === 'linux';
+    }).length;
+    const sub = linuxCount > 0
+      ? `Action applied. Note: asset reboot is not available for ${linuxCount} Linux patch${linuxCount !== 1 ? 'es' : ''} in this selection.`
+      : 'Action applied to selected patches.';
+    showToast(`${label} — ${selectedIds.size} patches`, sub);
+    return;
+  }
   showToast(`${label} — ${selectedIds.size} patches`, 'Action applied to selected patches.');
 }
 
