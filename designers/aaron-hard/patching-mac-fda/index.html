@@ -148,12 +148,15 @@ button { cursor: pointer; font-family: var(--font); }
 /* TOOLBAR */
 .toolbar { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; background: white; margin: 0 16px; border-bottom: 1px solid var(--color-stroke); flex-shrink: 0; gap: 12px; }
 .toolbar-left { display: flex; align-items: center; gap: 8px; }
-.toolbar-right { display: flex; align-items: center; gap: 6px; }
+.toolbar-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-left: auto; }
 .item-count { font-size: var(--fs-sm); color: var(--color-text-muted); white-space: nowrap; }
 .item-count strong { color: var(--color-text-default); }
 .search-wrap { display: flex; align-items: center; gap: 7px; border: 1px solid var(--color-stroke); border-radius: var(--r-md); padding: 0 10px; height: var(--h-control); background: white; width: 240px; }
 .search-wrap input { border: none; outline: none; font-family: var(--font); font-size: var(--fs-sm); color: var(--color-text-default); flex: 1; background: transparent; }
 .search-wrap input::placeholder { color: var(--color-text-muted); }
+.install-btn-wrap { position: relative; display: inline-block; }
+.install-btn-wrap.disabled-tip::after { content: 'Select patches to install'; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a1a1a; color: white; font-size: 11px; padding: 4px 8px; border-radius: var(--r-md); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 300; }
+.install-btn-wrap.disabled-tip:hover::after { opacity: 1; }
 .bulk-actions { display: flex; align-items: center; gap: 8px; }
 .bulk-actions.hidden { display: none; }
 /* ---- details/summary reset ---- */
@@ -262,7 +265,7 @@ tbody tr:hover .hover-acts { opacity: 1; pointer-events: auto; background: var(-
 .act-btn.kebab-btn { opacity: 1 !important; pointer-events: auto !important; color: var(--color-primary); }
 .act-btn[data-tip]::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a1a1a; color: white; font-size: 11px; padding: 4px 8px; border-radius: var(--r-md); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 300; }
 .act-btn[data-tip]:hover::after { opacity: 1; }
-tbody tr:hover { position: relative; z-index: 60; }
+tbody tr:hover { position: relative; }
 tbody tr:first-child:hover td { box-shadow: inset 0 1px 0 var(--color-stroke); }
 tbody tr:first-child:hover .hover-acts { box-shadow: inset 0 1px 0 var(--color-stroke); }
 .row-menu { display: none; position: fixed; background: white; border: 1px solid var(--color-stroke); border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); min-width: 210px; z-index: 1000; overflow: hidden; }
@@ -703,20 +706,22 @@ tbody tr:first-child:hover .hover-acts { box-shadow: inset 0 1px 0 var(--color-s
         <!-- TOOLBAR -->
         <div class="toolbar">
           <div class="toolbar-left">
+            <span class="install-btn-wrap" id="install-btn-wrap">
+            <button class="btn-primary" id="bulk-install-btn" disabled onclick="bulkAction('Install patches')" style="height:var(--h-control);padding:0 14px;font-size:var(--fs-sm);font-weight:600;opacity:0.4;cursor:not-allowed;pointer-events:none">Install patches</button>
+            </span>
             <div class="bulk-actions hidden" id="bulk-actions">
               <details class="bulk-dropdown" id="bulk-dropdown">
-                <summary class="actions-btn">Actions <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7.5H15L9.99562 13.3333L5 7.5Z" fill="currentColor"/></svg></summary>
+                <summary class="actions-btn">More actions <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7.5H15L9.99562 13.3333L5 7.5Z" fill="currentColor"/></svg></summary>
                 <div class="dropdown-panel">
-                  <button class="dropdown-item" onclick="bulkAction('Install patches');document.getElementById('bulk-dropdown').removeAttribute('open')">Install patches</button>
                   <button class="dropdown-item" onclick="bulkAction('Cancel pending');document.getElementById('bulk-dropdown').removeAttribute('open')">Cancel pending</button>
                   <button class="dropdown-item" onclick="bulkAction('Reboot assets');document.getElementById('bulk-dropdown').removeAttribute('open')">Reboot assets</button>
                 </div>
               </details>
-              <span class="selected-label" id="selected-label"></span>
             </div>
           </div>
           <div class="toolbar-right">
             <span class="item-count" id="item-count"></span>
+            <span id="selected-label" style="display:none;white-space:nowrap;font-size:var(--fs-sm);color:var(--color-text-default)"></span>
             <div class="search-wrap">
               <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.0328 16.5572L14.1272 12.6303C14.9974 11.4511 15.4662 10.024 15.4648 8.55864C15.4626 6.73055 14.7348 4.97805 13.4413 3.68579C12.1477 2.39353 10.394 1.66712 8.56514 1.66602C6.73683 1.66739 4.98373 2.39364 3.69043 3.68543C2.39713 4.97721 1.66926 6.72903 1.6665 8.55657C1.66926 10.3841 2.39713 12.1359 3.69043 13.4277C4.98373 14.7195 6.73683 15.4458 8.56514 15.4471C10.038 15.4485 11.4723 14.9765 12.6562 14.1007L16.5545 18.0203C16.6509 18.1185 16.7658 18.1968 16.8926 18.2504C17.0193 18.304 17.1555 18.332 17.2931 18.3327C17.5664 18.3315 17.8283 18.2231 18.0224 18.0307C18.1199 17.9347 18.1976 17.8203 18.2509 17.6943C18.3042 17.5683 18.3322 17.433 18.3331 17.2961C18.3341 17.1593 18.3081 17.0236 18.2566 16.8968C18.205 16.77 18.129 16.6546 18.0328 16.5572ZM8.56619 13.3697C7.28931 13.3688 6.06494 12.8615 5.16195 11.9591C4.25895 11.0567 3.75116 9.83292 3.75006 8.55657C3.75254 7.28131 4.26081 6.05905 5.16342 5.15779C6.06604 4.25652 7.28934 3.7498 8.56514 3.7487C9.8414 3.7498 11.0651 4.25679 11.968 5.15847C12.8708 6.06015 13.3791 7.28292 13.3813 8.55864C13.3788 9.83408 12.8704 11.0565 11.9675 11.9578C11.0647 12.8591 9.84112 13.3657 8.56514 13.3665L8.56619 13.3697Z" fill="#8d8d99"/></svg>
               <input type="text" placeholder="Search patches…" id="search-input" oninput="onSearch()">
@@ -786,10 +791,10 @@ tbody tr:first-child:hover .hover-acts { box-shadow: inset 0 1px 0 var(--color-s
         <!-- PAGINATION -->
         <div class="pagination">
           <span>Results per page</span>
-          <select id="page-size" name="page-size" style="border:1px solid var(--color-stroke);border-radius:var(--r-md);padding:3px 6px;font-size:var(--fs-sm);font-family:var(--font)"><option>20</option><option>50</option><option>100</option><option>250</option></select>
-          <button class="pg-btn" disabled><svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.0833 15.8338C11.807 15.8337 11.5421 15.7239 11.3468 15.5286L6.13848 10.3202C5.9432 10.1249 5.8335 9.85997 5.8335 9.58376C5.8335 9.30755 5.9432 9.04264 6.13848 8.8473L11.3468 3.63897C11.5422 3.44369 11.8071 3.33398 12.0833 3.33398C12.3595 3.33398 12.6244 3.44369 12.8197 3.63897C13.015 3.83431 13.1247 4.09922 13.1247 4.37543C13.1247 4.65164 13.015 4.91655 12.8197 5.11189L8.34786 9.58376L12.8197 14.0556C13.015 14.251 13.1247 14.5159 13.1247 14.7921C13.1247 15.0683 13.015 15.3332 12.8197 15.5286C12.6244 15.7239 12.3595 15.8337 12.0833 15.8338Z" fill="currentColor"/></svg></button>
-          <span class="pg-label">1</span><span>of 2</span>
-          <button class="pg-btn"><svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.70899 15.8338C7.43274 15.8337 7.16783 15.7239 6.97253 15.5286C6.77725 15.3332 6.66755 15.0683 6.66755 14.7921C6.66755 14.5159 6.77725 14.251 6.97253 14.0556L11.4434 9.58376L6.97149 5.11189C6.77621 4.91655 6.6665 4.65164 6.6665 4.37543C6.6665 4.09922 6.77621 3.83431 6.97149 3.63897C7.16683 3.44369 7.43174 3.33398 7.70795 3.33398C7.98416 3.33398 8.24907 3.44369 8.44441 3.63897L13.6527 8.8473C13.848 9.04264 13.9577 9.30755 13.9577 9.58376C13.9577 9.85997 13.848 10.1249 13.6527 10.3202L8.44441 15.5286C8.24936 15.7237 7.98487 15.8334 7.70899 15.8338Z" fill="currentColor"/></svg></button>
+          <select id="page-size" name="page-size" onchange="onPageSizeChange(this.value)" style="border:1px solid var(--color-stroke);border-radius:var(--r-md);padding:3px 6px;font-size:var(--fs-sm);font-family:var(--font)"><option>20</option><option>50</option><option>100</option><option>250</option></select>
+          <button class="pg-btn" id="pg-prev" onclick="pgPrev()"><svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.0833 15.8338C11.807 15.8337 11.5421 15.7239 11.3468 15.5286L6.13848 10.3202C5.9432 10.1249 5.8335 9.85997 5.8335 9.58376C5.8335 9.30755 5.9432 9.04264 6.13848 8.8473L11.3468 3.63897C11.5422 3.44369 11.8071 3.33398 12.0833 3.33398C12.3595 3.33398 12.6244 3.44369 12.8197 3.63897C13.015 3.83431 13.1247 4.09922 13.1247 4.37543C13.1247 4.65164 13.015 4.91655 12.8197 5.11189L8.34786 9.58376L12.8197 14.0556C13.015 14.251 13.1247 14.5159 13.1247 14.7921C13.1247 15.0683 13.015 15.3332 12.8197 15.5286C12.6244 15.7239 12.3595 15.8337 12.0833 15.8338Z" fill="currentColor"/></svg></button>
+          <span id="pg-label">1</span><span id="pg-total">of 2</span>
+          <button class="pg-btn" id="pg-next" onclick="pgNext()"><svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.70899 15.8338C7.43274 15.8337 7.16783 15.7239 6.97253 15.5286C6.77725 15.3332 6.66755 15.0683 6.66755 14.7921C6.66755 14.5159 6.77725 14.251 6.97253 14.0556L11.4434 9.58376L6.97149 5.11189C6.77621 4.91655 6.6665 4.65164 6.6665 4.37543C6.6665 4.09922 6.77621 3.83431 6.97149 3.63897C7.16683 3.44369 7.43174 3.33398 7.70795 3.33398C7.98416 3.33398 8.24907 3.44369 8.44441 3.63897L13.6527 8.8473C13.848 9.04264 13.9577 9.30755 13.9577 9.58376C13.9577 9.85997 13.848 10.1249 13.6527 10.3202L8.44441 15.5286C8.24936 15.7237 7.98487 15.8334 7.70899 15.8338Z" fill="currentColor"/></svg></button>
         </div>
 
       </div>
@@ -1131,6 +1136,8 @@ let selectedIds = new Set();
 let allPagesSelected = false;
 let openMenuRow = null;
 let searchQuery = '';
+let currentPage = 1;
+let pageSize = 20;
 
 // ============================================================
 // NAV
@@ -1171,7 +1178,7 @@ function getCvssClass(sev) {
 // ============================================================
 function buildRow(row) {
   const sel = selectedIds.has(row.id);
-  return `<tr class="${sel?'row-selected':''}">
+  return `<tr class="${sel?'row-selected':''}" data-row-id="${row.id}" onmouseenter="rowMouseEnter(this)" onmouseleave="rowMouseLeave(this)">
     <td class="col-check" onclick="event.stopPropagation()">
       <input type="checkbox" id="row-cb-${row.id}" name="row-cb-${row.id}" class="apex-cb" ${sel?'checked':''} onchange="toggleRow(${row.id})">
     </td>
@@ -1233,7 +1240,7 @@ const DIALOGS = {
             <option value="custom">Custom date &amp; time…</option>
           </select>
         </div>
-        <div id="dlg-install-hint" class="${row.rebootRequired ? 'dlg-warn-box' : 'dlg-info-box'}">${row.rebootRequired ? '⚠ This patch requires a reboot to complete installation.' : 'Patch installation command will be queued to the agent.'}</div>
+        ${row.rebootRequired ? '<div id="dlg-install-hint" class="dlg-warn-box">⚠ This patch requires a reboot to complete installation.</div>' : '<div id="dlg-install-hint" style="display:none"></div>'}
         <div id="dlg-custom-dt" style="display:none">
           <div class="dlg-date-row">
             <div class="dlg-field"><label class="dlg-label" for="dlg-date">On</label><input type="date" class="dlg-input" id="dlg-date" name="dlg-date" value="2026-07-02"></div>
@@ -1270,6 +1277,95 @@ const DIALOGS = {
         <div class="dlg-info-box">Asset reboot is not supported for Linux devices.</div>
       </div>
       `}
+      <div class="dlg-collapsible" id="dlg-user-opts-wrap" style="display:none">
+        <div class="dlg-collapsible-hdr" id="dlg-user-opts-hdr" onclick="dlgCollapsible('dlg-user-opts-hdr','dlg-user-opts-body')">
+          User options
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7.5H15L9.99562 13.3333L5 7.5Z" fill="currentColor"/></svg>
+        </div>
+        <div class="dlg-collapsible-body" id="dlg-user-opts-body" style="display:none">
+          <div class="dlg-field">
+            <label class="dlg-label" for="dlg-reboot-timer">Reboot countdown timer</label>
+            <select class="dlg-select" id="dlg-reboot-timer" name="dlg-reboot-timer">
+              <option>No timer</option>
+              <option>5 minutes</option>
+              <option>15 minutes</option>
+              <option>30 minutes</option>
+              <option>1 hour</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="dlg-divider"></div>
+      <div class="dlg-section">
+        <div class="dlg-section-title">Retry installation</div>
+        <div class="dlg-toggle-row">
+          <button class="dlg-toggle" id="dlg-t-retry" onclick="dlgToggle('dlg-t-retry', dlgRetryChange)"><span class="dlg-toggle-knob"></span><span class="dlg-toggle-text">OFF</span></button>
+          <div class="dlg-toggle-info">
+            <div class="dlg-toggle-label">Enable retry</div>
+            <div class="dlg-toggle-desc">If patches aren't fully installed, the system will retry at regular intervals.</div>
+            <div class="dlg-toggle-sub" id="dlg-retry-sub" style="display:none">
+              <div class="dlg-field"><label class="dlg-label" for="dlg-retry-freq">Repeat</label>
+                <select class="dlg-select" id="dlg-retry-freq" name="dlg-retry-freq" style="max-width:220px">
+                  <option>Daily</option><option>Weekly</option><option>Monthly</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`
+  },
+  BulkInstall: {
+    title: 'Install patches',
+    subtitle: (count) => `Install ${count} selected patch${count !== 1 ? 'es' : ''}.`,
+    confirmLabel: 'Install patches',
+    successTitle: 'Patch installation started.',
+    successSub: (count) => `${count} patches are being installed.`,
+    body: ({ count, hasReboot, linuxCount, hasNonLinux }) => `
+      <div class="dlg-section">
+        <div class="dlg-section-title">Install options</div>
+        <div class="dlg-field">
+          <select id="dlg-install-opts" name="dlg-install-opts" class="dlg-select" onchange="dlgInstallOptChange(this.value)">
+            <option value="now">Install now</option>
+            <option value="window">Next maintenance window</option>
+            <option value="tonight">Tonight (11:00 PM)</option>
+            <option value="custom">Custom date &amp; time…</option>
+          </select>
+        </div>
+        ${hasReboot ? '<div id="dlg-install-hint" class="dlg-warn-box">⚠ This patch requires a reboot to complete installation.</div>' : '<div id="dlg-install-hint" style="display:none"></div>'}
+        <div id="dlg-custom-dt" style="display:none">
+          <div class="dlg-date-row">
+            <div class="dlg-field"><label class="dlg-label" for="dlg-date">On</label><input type="date" class="dlg-input" id="dlg-date" name="dlg-date" value="2026-07-02"></div>
+            <div class="dlg-field"><label class="dlg-label" for="dlg-time">At</label><input type="time" class="dlg-input" id="dlg-time" name="dlg-time" value="23:00"></div>
+          </div>
+        </div>
+      </div>
+      <div class="dlg-divider"></div>
+      <div class="dlg-section">
+        <div class="dlg-section-title">Offline assets</div>
+        <div class="dlg-toggle-row">
+          <button class="dlg-toggle" id="dlg-t-offline" onclick="dlgToggle('dlg-t-offline')"><span class="dlg-toggle-knob"></span><span class="dlg-toggle-text">OFF</span></button>
+          <div class="dlg-toggle-info">
+            <div class="dlg-toggle-label">Install when online</div>
+            <div class="dlg-toggle-desc">If an asset is offline, patch installation will resume when the device is back online.</div>
+          </div>
+        </div>
+      </div>
+      <div class="dlg-divider"></div>
+      <div class="dlg-section">
+        <div class="dlg-section-title">Asset reboot</div>
+        ${!hasNonLinux ? `
+        <div class="dlg-info-box">Asset reboot is not supported for Linux devices.</div>
+        ` : `
+        <div class="dlg-toggle-row">
+          <button class="dlg-toggle" id="dlg-t-reboot" onclick="dlgToggle('dlg-t-reboot', dlgRebootChange)"><span class="dlg-toggle-knob"></span><span class="dlg-toggle-text">OFF</span></button>
+          <div class="dlg-toggle-info">
+            <div class="dlg-toggle-label">Reboot asset after installation</div>
+            <div class="dlg-toggle-desc">Assets will be prompted to reboot after patch installation.</div>
+          </div>
+        </div>
+        ${linuxCount > 0 ? `<div class="dlg-info-box" style="margin-top:10px">Asset reboot is not supported on Linux. ${linuxCount} Linux patch${linuxCount !== 1 ? 'es' : ''} in your selection will be skipped.</div>` : ''}
+        `}
+      </div>
       <div class="dlg-collapsible" id="dlg-user-opts-wrap" style="display:none">
         <div class="dlg-collapsible-hdr" id="dlg-user-opts-hdr" onclick="dlgCollapsible('dlg-user-opts-hdr','dlg-user-opts-body')">
           User options
@@ -1446,13 +1542,8 @@ function dlgInstallOptChange(val) {
     tonight: 'Installation will be queued tonight at 11:00 PM.',
     custom:  'Installation will run at your specified date and time.'
   };
-  if (hint) {
-    const rebootMsg = hint.classList.contains('dlg-warn-box') ? ' This patch requires a reboot to complete installation.' : '';
-    if (rebootMsg) {
-      hint.textContent = '⚠ ' + (msgs[val] || msgs.now) + rebootMsg;
-    } else {
-      hint.textContent = msgs[val] || msgs.now;
-    }
+  if (hint && hint.classList.contains('dlg-warn-box')) {
+    hint.textContent = '⚠ This patch requires a reboot to complete installation.';
   }
   if (custom) custom.style.display = val === 'custom' ? 'block' : 'none';
 }
@@ -1571,27 +1662,27 @@ function handleRowClick(e, id) {
 }
 function toggleSelectAll() {
   const cb = document.getElementById('select-all-cb');
-  if (cb.checked) getFilteredData().forEach(r => selectedIds.add(r.id));
+  if (cb.checked) getPageData().forEach(r => selectedIds.add(r.id));
   else { selectedIds.clear(); allPagesSelected = false; }
   renderTable();
 }
-function selectAllPage()  { allPagesSelected=false; getFilteredData().forEach(r=>selectedIds.add(r.id)); renderTable(); document.getElementById('select-all-dropdown').removeAttribute('open'); }
+function selectAllPage()  { allPagesSelected=false; getPageData().forEach(r=>selectedIds.add(r.id)); renderTable(); document.getElementById('select-all-dropdown').removeAttribute('open'); }
 function selectAllPages() { allPagesSelected=true;  DATA.patches.forEach(r=>selectedIds.add(r.id));  renderTable(); document.getElementById('select-all-dropdown').removeAttribute('open'); }
 function deselectAll()    { allPagesSelected=false; selectedIds.clear(); renderTable(); document.getElementById('select-all-dropdown').removeAttribute('open'); }
 function updateSelectAllState() {
   const cb = document.getElementById('select-all-cb');
-  const rows = getFilteredData();
-  const n = rows.filter(r=>selectedIds.has(r.id)).length;
+  const page = getPageData();
+  const n = page.filter(r=>selectedIds.has(r.id)).length;
   cb.classList.remove('indeterminate');
   if (n===0) { cb.checked=false; }
-  else if (n===rows.length) { cb.checked=true; }
+  else if (n===page.length) { cb.checked=true; }
   else { cb.checked=false; cb.classList.add('indeterminate'); }
 }
 
 // ============================================================
 // SEARCH
 // ============================================================
-function onSearch() { searchQuery=document.getElementById('search-input').value.toLowerCase(); renderTable(); }
+function onSearch() { searchQuery=document.getElementById('search-input').value.toLowerCase(); currentPage=1; renderTable(); }
 function getFilteredData() {
   if (!searchQuery) return DATA.patches;
   return DATA.patches.filter(r =>
@@ -1602,19 +1693,33 @@ function getFilteredData() {
   );
 }
 
+function getPageData() {
+  const all = getFilteredData();
+  const start = (currentPage - 1) * pageSize;
+  return all.slice(start, start + pageSize);
+}
+
 // ============================================================
 // BULK ACTIONS
 // ============================================================
 function bulkAction(label) {
   if (label === 'Install patches') {
-    const linuxCount = [...selectedIds].filter(id => {
-      const row = DATA.patches.find(r => r.id === id);
-      return row && row.os === 'linux';
-    }).length;
-    const sub = linuxCount > 0
-      ? `Action applied. Note: asset reboot is not available for ${linuxCount} Linux patch${linuxCount !== 1 ? 'es' : ''} in this selection.`
-      : 'Action applied to selected patches.';
-    showToast(`${label} — ${selectedIds.size} patches`, sub);
+    const selected = [...selectedIds].map(id => DATA.patches.find(r => r.id === id)).filter(Boolean);
+    const count      = selected.length;
+    const hasReboot  = selected.some(r => r.rebootRequired);
+    const linuxCount = selected.filter(r => r.os === 'linux').length;
+    const hasNonLinux = selected.some(r => r.os !== 'linux');
+    const cfg = DIALOGS.BulkInstall;
+    currentDialogAction = 'BulkInstall';
+    currentDialogRow = null;
+    document.getElementById('dlg-title').textContent = cfg.title;
+    document.getElementById('dlg-subtitle').textContent = cfg.subtitle(count);
+    document.getElementById('dlg-body').innerHTML = cfg.body({ count, hasReboot, linuxCount, hasNonLinux });
+    const confirmBtn = document.getElementById('dlg-confirm-btn');
+    confirmBtn.textContent = cfg.confirmLabel;
+    confirmBtn.className = 'btn-primary';
+    confirmBtn.onclick = confirmDialog;
+    document.getElementById('action-dlg-overlay').classList.add('open');
     return;
   }
   showToast(`${label} — ${selectedIds.size} patches`, 'Action applied to selected patches.');
@@ -1625,23 +1730,76 @@ function bulkAction(label) {
 // ============================================================
 function renderTable() {
   const tbody = document.getElementById('patch-body');
-  tbody.innerHTML = getFilteredData().map(buildRow).join('');
+  tbody.innerHTML = getPageData().map(buildRow).join('');
   tbody.querySelectorAll('.row-menu[id^="menu-"]').forEach(m => document.body.appendChild(m));
   renderToolbar();
+  renderPagination();
 }
 function renderToolbar() {
   const rows = getFilteredData();
   const n = selectedIds.size;
-  document.getElementById('item-count').innerHTML = `<strong>${rows.length}</strong> items`;
+  document.getElementById('item-count').innerHTML = `<strong>${rows.length} items</strong>`;
   const bulk = document.getElementById('bulk-actions');
   const ic   = document.getElementById('item-count');
+  const installBtn = document.getElementById('bulk-install-btn');
+  const installWrap = document.getElementById('install-btn-wrap');
   if (n > 0) {
     bulk.classList.remove('hidden'); ic.style.display='none';
-    document.getElementById('selected-label').textContent = `${n} selected`;
+    const sl = document.getElementById('selected-label');
+    sl.innerHTML = `<strong>${n} of ${rows.length} items selected</strong>`; sl.style.display = '';
+    installBtn.disabled = false; installBtn.style.opacity = '1'; installBtn.style.cursor = 'pointer'; installBtn.style.pointerEvents = 'auto';
+    installWrap.classList.remove('disabled-tip');
   } else {
+    const sl = document.getElementById('selected-label');
+    sl.style.display = 'none';
     bulk.classList.add('hidden'); ic.style.display='';
+    installBtn.disabled = true; installBtn.style.opacity = '0.4'; installBtn.style.cursor = 'not-allowed'; installBtn.style.pointerEvents = 'none';
+    installWrap.classList.add('disabled-tip');
   }
   updateSelectAllState();
+}
+function renderPagination() {
+  const total = getFilteredData().length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  if (currentPage > totalPages) currentPage = totalPages;
+  document.getElementById('pg-label').textContent = currentPage;
+  document.getElementById('pg-total').textContent = 'of ' + totalPages;
+  document.getElementById('pg-prev').disabled = currentPage <= 1;
+  document.getElementById('pg-next').disabled = currentPage >= totalPages;
+}
+function pgPrev() { if (currentPage > 1) { currentPage--; renderTable(); } }
+function pgNext() { const tp = Math.max(1, Math.ceil(getFilteredData().length / pageSize)); if (currentPage < tp) { currentPage++; renderTable(); } }
+function onPageSizeChange(v) { pageSize = parseInt(v); currentPage = 1; renderTable(); }
+
+// ============================================================
+// ROW HOVER Z-INDEX (scroll-aware)
+// ============================================================
+let _hoveredRow = null;
+function _setRowElevated(tr, elevated) {
+  if (!tr) return;
+  tr.style.zIndex = elevated ? '60' : '';
+  tr.style.position = elevated ? 'relative' : '';
+}
+function _isRowAboveHeader(tr) {
+  const header = document.querySelector('thead');
+  if (!header || !tr) return true;
+  return tr.getBoundingClientRect().top >= header.getBoundingClientRect().bottom - 1;
+}
+function rowMouseEnter(tr) {
+  _hoveredRow = tr;
+  _setRowElevated(tr, _isRowAboveHeader(tr));
+}
+function rowMouseLeave(tr) {
+  _setRowElevated(tr, false);
+  _hoveredRow = null;
+}
+function initGridScrollListener() {
+  const gw = document.querySelector('.grid-wrap');
+  if (!gw) return;
+  gw.addEventListener('scroll', function() {
+    if (!_hoveredRow) return;
+    _setRowElevated(_hoveredRow, _isRowAboveHeader(_hoveredRow));
+  }, { passive: true });
 }
 
 // ============================================================
@@ -2020,6 +2178,7 @@ function makeDonut(canvasId, totalId, legendId, cfg) {
 // ============================================================
 function init() {
   renderTable();
+  initGridScrollListener();
   makeDonut('chart-severity', 'sev-total',    'sev-legend',    DATA.charts.severity);
   makeDonut('chart-class',    'class-total',   'class-legend',  DATA.charts.classification);
   makeDonut('chart-os',       'os-total',      'os-legend',     DATA.charts.os);
