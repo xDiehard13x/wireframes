@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>n-able Design — Wireframes</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f4f4f6;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: white; border-radius: 8px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+      padding: 40px; width: 100%; max-width: 380px;
+    }
+    .logo { font-size: 12px; font-weight: 700; color: #8500cc; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 24px; }
+    h1 { font-size: 22px; font-weight: 700; color: #111; margin: 0 0 8px; }
+    p  { font-size: 14px; color: #666; margin: 0 0 28px; }
+    label { display: block; font-size: 12px; font-weight: 600; color: #444; margin-bottom: 6px; }
+    input {
+      width: 100%; height: 40px; padding: 0 12px;
+      border: 1px solid #d5d5d5; border-radius: 4px;
+      font-size: 14px; outline: none;
+    }
+    input:focus { border-color: #0079aa; box-shadow: 0 0 0 3px rgba(0,121,170,0.12); }
+    button {
+      width: 100%; height: 40px; background: #0079aa; color: white;
+      border: none; border-radius: 4px; font-size: 14px; font-weight: 600;
+      cursor: pointer; margin-top: 16px;
+    }
+    button:hover { background: #006a93; }
+    .error {
+      background: #fce8e8; color: #c62828; border-radius: 4px;
+      padding: 10px 14px; font-size: 13px; margin-bottom: 16px; display: none;
+    }
+    /* Wireframe list (shown after auth) */
+    .wireframes { display: none; }
+    .wireframes h2 { font-size: 15px; font-weight: 700; color: #111; margin: 0 0 4px; }
+    .wireframes .hint { font-size: 13px; color: #888; margin: 0 0 20px; }
+    .product { margin-bottom: 20px; }
+    .product-name { font-size: 11px; font-weight: 700; color: #8500cc; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    .link-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .link-row a {
+      flex: 1; font-size: 13px; color: #0079aa; text-decoration: none;
+      padding: 8px 12px; border: 1px solid #e5e5e5; border-radius: 4px;
+    }
+    .link-row a:hover { background: #f5fbfe; border-color: #0079aa; }
+    .copy-btn {
+      width: auto; height: 32px; padding: 0 10px; font-size: 12px;
+      background: white; color: #666; border: 1px solid #d5d5d5;
+      border-radius: 4px; cursor: pointer; margin-top: 0; white-space: nowrap;
+    }
+    .copy-btn:hover { border-color: #0079aa; color: #0079aa; background: white; }
+    .signout { width: auto; background: none; border: none; color: #aaa; font-size: 12px; cursor: pointer; margin-top: 20px; padding: 0; }
+    .signout:hover { color: #666; background: none; }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- Login form -->
+  <div id="login-view">
+    <div class="logo">n-able Design</div>
+    <h1>Design previews</h1>
+    <p>Enter the access password to view wireframes. Contact Aaron Hard if you need access.</p>
+    <div class="error" id="err">Incorrect password. Please try again.</div>
+    <label for="pw">Password</label>
+    <input type="password" id="pw" placeholder="Enter access password" autocomplete="current-password">
+    <button id="btn-enter">View wireframes</button>
+  </div>
+
+  <!-- Wireframe list (shown after auth) -->
+  <div class="wireframes" id="wireframe-view">
+    <div class="logo">n-able Design</div>
+    <h2>Design previews</h2>
+    <p class="hint">Click a wireframe to open it, or copy the link to share.</p>
+
+    <!--
+      ── ADD WIREFRAMES HERE ──────────────────────────────────────────────────
+      Duplicate a .product block for each product area.
+      Duplicate a .link-row for each screen within that product.
+
+      The href should be the full GitHub Pages URL for that wireframe, e.g.:
+        https://xDiehard13x.github.io/wireframes/patching/patch-management.html
+
+      The data-url on the copy button should match the href.
+      ────────────────────────────────────────────────────────────────────────
+    -->
+
+    <div class="product">
+      <div class="product-name">Patching</div>
+      <div class="link-row">
+        <a href="https://xDiehard13x.github.io/wireframes/patching/patch-management.html" target="_blank">Patch Management</a>
+        <button class="copy-btn" data-url="https://xDiehard13x.github.io/wireframes/patching/patch-management.html">Copy link</button>
+      </div>
+    </div>
+
+    <div class="product">
+      <div class="product-name">Vulnerability Management</div>
+      <div class="link-row">
+        <a href="https://xDiehard13x.github.io/wireframes/vulnerability-management/vuln-list-view.html" target="_blank">Vulnerability List</a>
+        <button class="copy-btn" data-url="https://xDiehard13x.github.io/wireframes/vulnerability-management/vuln-list-view.html">Copy link</button>
+      </div>
+    </div>
+
+    <div class="product">
+      <div class="product-name">Dashboards</div>
+      <div class="link-row">
+        <a href="https://xDiehard13x.github.io/wireframes/dashboards/dashboard-editable.html" target="_blank">Dashboard (Editable)</a>
+        <button class="copy-btn" data-url="https://xDiehard13x.github.io/wireframes/dashboards/dashboard-editable.html">Copy link</button>
+      </div>
+    </div>
+
+    <div class="product">
+      <div class="product-name">Passportal</div>
+      <!-- Add screens here as they're published -->
+    </div>
+
+    <button class="signout" id="btn-signout">Sign out</button>
+  </div>
+
+</div>
+
+<script>
+  // ── Configuration ──────────────────────────────────────────────────────────
+  // To change the password:
+  //   1. Run this in your browser console: crypto.subtle.digest('SHA-256', new TextEncoder().encode('your-new-password')).then(b => console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))
+  //   2. Replace PASSWORD_HASH below with the output.
+  const PASSWORD_HASH    = "62670334880e11495d987a1a6d3a96b73eb7fc2ac4143bf631d522d439e0dfe8";
+  const SESSION_KEY      = "wf_gate_session";
+  const SESSION_DAYS     = 7;
+  // ──────────────────────────────────────────────────────────────────────────
+
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+    return [...new Uint8Array(buf)].map(x => x.toString(16).padStart(2, "0")).join("");
+  }
+
+  function isSessionValid() {
+    try {
+      const s = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+      return s && s.hash === PASSWORD_HASH && Date.now() < s.exp;
+    } catch { return false; }
+  }
+
+  function storeSession(hash) {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      hash, exp: Date.now() + SESSION_DAYS * 86400 * 1000
+    }));
+  }
+
+  function showWireframes() {
+    document.getElementById("login-view").style.display    = "none";
+    document.getElementById("wireframe-view").style.display = "block";
+  }
+
+  // Check existing session on load
+  if (isSessionValid()) showWireframes();
+
+  // Password submit
+  document.getElementById("btn-enter").addEventListener("click", async () => {
+    const pw  = document.getElementById("pw").value;
+    const err = document.getElementById("err");
+    err.style.display = "none";
+    const hash = await sha256(pw);
+    if (hash === PASSWORD_HASH) {
+      storeSession(hash);
+      showWireframes();
+    } else {
+      err.style.display = "block";
+      document.getElementById("pw").value = "";
+      document.getElementById("pw").focus();
+    }
+  });
+
+  document.getElementById("pw").addEventListener("keydown", e => {
+    if (e.key === "Enter") document.getElementById("btn-enter").click();
+  });
+
+  // Sign out
+  document.getElementById("btn-signout").addEventListener("click", () => {
+    localStorage.removeItem(SESSION_KEY);
+    document.getElementById("wireframe-view").style.display = "none";
+    document.getElementById("login-view").style.display     = "block";
+    document.getElementById("pw").focus();
+  });
+
+  // Copy link buttons
+  document.querySelectorAll(".copy-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      navigator.clipboard.writeText(btn.dataset.url).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = "Copied!";
+        setTimeout(() => btn.textContent = orig, 1500);
+      });
+    });
+  });
+</script>
+</body>
+</html>
