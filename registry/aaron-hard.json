@@ -1,12 +1,12 @@
 {
   "designer": "aaron-hard",
   "designer_display": "Aaron Hard",
-  "updated": "2026-07-14T14:07:40Z",
+  "updated": "2026-07-15T16:48:37Z",
   "projects": {
     "patching-mac-fda": {
       "display_name": "Patch Management (Mac FDA)",
       "github_url": "https://xDiehard13x.github.io/wireframes/designers/aaron-hard/patching-mac-fda/",
-      "last_pushed": "2026-07-14T14:07:40Z",
+      "last_pushed": "2026-07-15T16:48:37Z",
       "epic_url": ""
     },
     "vulnerability-management": {
