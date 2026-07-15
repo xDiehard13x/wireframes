@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>n-able Design — Wireframes</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #f4f4f6;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f4f4f6; height: 100vh; overflow: hidden; }
+
+    /* ── Auth screen ─────────────────────────────────────────── */
+    #auth-screen {
+      position: fixed; inset: 0; background: #f4f4f6;
       display: flex; align-items: center; justify-content: center;
-      min-height: 100vh;
+      z-index: 100;
     }
     .card {
       background: white; border-radius: 8px;
@@ -19,122 +20,138 @@
       padding: 40px; width: 100%; max-width: 380px;
     }
     .logo { font-size: 12px; font-weight: 700; color: #8500cc; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 24px; }
-    h1 { font-size: 22px; font-weight: 700; color: #111; margin: 0 0 8px; }
-    p  { font-size: 14px; color: #666; margin: 0 0 28px; }
+    h1 { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 8px; }
+    .sub { font-size: 14px; color: #666; margin-bottom: 28px; }
     label { display: block; font-size: 12px; font-weight: 600; color: #444; margin-bottom: 6px; }
-    input {
+    input[type=password] {
       width: 100%; height: 40px; padding: 0 12px;
       border: 1px solid #d5d5d5; border-radius: 4px;
       font-size: 14px; outline: none;
     }
-    input:focus { border-color: #0079aa; box-shadow: 0 0 0 3px rgba(0,121,170,0.12); }
-    button {
+    input[type=password]:focus { border-color: #0079aa; box-shadow: 0 0 0 3px rgba(0,121,170,0.12); }
+    .btn-primary {
       width: 100%; height: 40px; background: #0079aa; color: white;
       border: none; border-radius: 4px; font-size: 14px; font-weight: 600;
       cursor: pointer; margin-top: 16px;
     }
-    button:hover { background: #006a93; }
+    .btn-primary:hover { background: #006a93; }
     .error {
       background: #fce8e8; color: #c62828; border-radius: 4px;
       padding: 10px 14px; font-size: 13px; margin-bottom: 16px; display: none;
     }
-    /* Wireframe list (shown after auth) */
-    .wireframes { display: none; }
-    .wireframes h2 { font-size: 15px; font-weight: 700; color: #111; margin: 0 0 4px; }
-    .wireframes .hint { font-size: 13px; color: #888; margin: 0 0 20px; }
-    .product { margin-bottom: 20px; }
-    .product-name { font-size: 11px; font-weight: 700; color: #8500cc; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
-    .link-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-    .link-row a {
-      flex: 1; font-size: 13px; color: #0079aa; text-decoration: none;
-      padding: 8px 12px; border: 1px solid #e5e5e5; border-radius: 4px;
+    .contact { margin-top: 20px; font-size: 12px; color: #aaa; text-align: center; }
+    .contact a { color: #0079aa; }
+
+    /* ── Wireframe browser ───────────────────────────────────── */
+    #browser { display: none; flex-direction: column; height: 100vh; }
+
+    /* Top bar */
+    .topbar {
+      height: 44px; background: #1a1a1a; flex-shrink: 0;
+      display: flex; align-items: center; gap: 0; padding: 0;
+      position: relative; z-index: 10;
     }
-    .link-row a:hover { background: #f5fbfe; border-color: #0079aa; }
-    .copy-btn {
-      width: auto; height: 32px; padding: 0 10px; font-size: 12px;
-      background: white; color: #666; border: 1px solid #d5d5d5;
-      border-radius: 4px; cursor: pointer; margin-top: 0; white-space: nowrap;
+    .topbar-brand {
+      width: 180px; height: 44px; background: #7B2D8B;
+      display: flex; align-items: center; padding: 0 16px;
+      font-size: 12px; font-weight: 700; color: white;
+      letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0;
     }
-    .copy-btn:hover { border-color: #0079aa; color: #0079aa; background: white; }
-    .signout { width: auto; background: none; border: none; color: #aaa; font-size: 12px; cursor: pointer; margin-top: 20px; padding: 0; }
-    .signout:hover { color: #666; background: none; }
+    .topbar-select {
+      flex: 1; display: flex; align-items: center; padding: 0 12px; gap: 8px;
+    }
+    select#wf-select {
+      height: 30px; padding: 0 8px; background: #2a2a2a; color: white;
+      border: 1px solid #444; border-radius: 4px; font-size: 13px; cursor: pointer;
+      min-width: 260px;
+    }
+    select#wf-select option { background: #2a2a2a; }
+    .topbar-actions { display: flex; align-items: center; gap: 8px; padding: 0 12px; }
+    .btn-open {
+      height: 28px; padding: 0 12px; background: transparent; color: #aaa;
+      border: 1px solid #444; border-radius: 4px; font-size: 12px; cursor: pointer;
+    }
+    .btn-open:hover { border-color: #888; color: white; }
+    .btn-signout {
+      height: 28px; padding: 0 10px; background: transparent; color: #666;
+      border: 1px solid #333; border-radius: 4px; font-size: 12px; cursor: pointer;
+    }
+    .btn-signout:hover { color: #aaa; border-color: #555; }
+
+    /* Iframe */
+    #wf-frame {
+      flex: 1; border: none; width: 100%; display: block;
+      background: white;
+    }
+
+    /* Empty state */
+    #empty-state {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 12px; color: #aaa;
+    }
+    #empty-state p { font-size: 14px; }
   </style>
 </head>
 <body>
-<div class="card">
 
-  <!-- Login form -->
-  <div id="login-view">
+<!-- ── Auth screen ──────────────────────────────────────────── -->
+<div id="auth-screen">
+  <div class="card">
     <div class="logo">n-able Design</div>
     <h1>Design previews</h1>
-    <p>Enter the access password to view wireframes. Contact Aaron Hard if you need access.</p>
+    <p class="sub">Enter the access password to view wireframes. Contact Aaron Hard if you need access.</p>
     <div class="error" id="err">Incorrect password. Please try again.</div>
     <label for="pw">Password</label>
     <input type="password" id="pw" placeholder="Enter access password" autocomplete="current-password">
-    <button id="btn-enter">View wireframes</button>
+    <button class="btn-primary" id="btn-enter">View wireframes</button>
+    <p class="contact">Need access? <a href="mailto:aaron.hard@n-able.com">Contact Aaron Hard</a></p>
+  </div>
+</div>
+
+<!-- ── Wireframe browser ─────────────────────────────────────── -->
+<div id="browser">
+  <div class="topbar">
+    <div class="topbar-brand">n-able Design</div>
+    <div class="topbar-select">
+      <select id="wf-select">
+        <option value="">— Select a wireframe —</option>
+
+        <!--
+          ── ADD WIREFRAMES HERE ───────────────────────────────────
+          Format: <option value="FULL_URL" data-group="Product Name">Screen Name</option>
+          ─────────────────────────────────────────────────────────
+        -->
+        <optgroup label="Patching">
+          <option value="https://xDiehard13x.github.io/wireframes/designers/aaron-hard/patching-mac-fda/">Patch Management</option>
+        </optgroup>
+        <optgroup label="Vulnerability Management">
+          <option value="https://xDiehard13x.github.io/wireframes/designers/aaron-hard/vulnerability-management/">Vulnerability Management</option>
+        </optgroup>
+        <optgroup label="Dashboards">
+          <option value="https://xDiehard13x.github.io/wireframes/designers/aaron-hard/dashboard-editable/">Dashboard (Editable)</option>
+        </optgroup>
+        <optgroup label="Passportal">
+          <!-- Add screens here as they're published -->
+        </optgroup>
+
+      </select>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn-open" id="btn-open-tab" title="Open in new tab">↗ Open</button>
+      <button class="btn-signout" id="btn-signout">Sign out</button>
+    </div>
   </div>
 
-  <!-- Wireframe list (shown after auth) -->
-  <div class="wireframes" id="wireframe-view">
-    <div class="logo">n-able Design</div>
-    <h2>Design previews</h2>
-    <p class="hint">Click a wireframe to open it, or copy the link to share.</p>
-
-    <!--
-      ── ADD WIREFRAMES HERE ──────────────────────────────────────────────────
-      Duplicate a .product block for each product area.
-      Duplicate a .link-row for each screen within that product.
-
-      The href should be the full GitHub Pages URL for that wireframe, e.g.:
-        https://xDiehard13x.github.io/wireframes/patching/patch-management.html
-
-      The data-url on the copy button should match the href.
-      ────────────────────────────────────────────────────────────────────────
-    -->
-
-    <div class="product">
-      <div class="product-name">Patching</div>
-      <div class="link-row">
-        <a href="https://xDiehard13x.github.io/wireframes/designers/aaron-hard/patching-mac-fda/" target="_blank">Patch Management</a>
-        <button class="copy-btn" data-url="https://xDiehard13x.github.io/wireframes/designers/aaron-hard/patching-mac-fda/">Copy link</button>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="product-name">Vulnerability Management</div>
-      <div class="link-row">
-        <a href="https://xDiehard13x.github.io/wireframes/designers/aaron-hard/vulnerability-management/" target="_blank">Vulnerability Management</a>
-        <button class="copy-btn" data-url="https://xDiehard13x.github.io/wireframes/designers/aaron-hard/vulnerability-management/">Copy link</button>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="product-name">Dashboards</div>
-      <div class="link-row">
-        <a href="https://xDiehard13x.github.io/wireframes/designers/aaron-hard/dashboard-editable/" target="_blank">Dashboard (Editable)</a>
-        <button class="copy-btn" data-url="https://xDiehard13x.github.io/wireframes/designers/aaron-hard/dashboard-editable/">Copy link</button>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="product-name">Passportal</div>
-      <!-- Add screens here as they're published -->
-    </div>
-
-    <button class="signout" id="btn-signout">Sign out</button>
+  <div id="empty-state">
+    <p>Select a wireframe above to preview it.</p>
   </div>
-
+  <iframe id="wf-frame" src="about:blank" allowfullscreen style="display:none"></iframe>
 </div>
 
 <script>
-  // ── Configuration ──────────────────────────────────────────────────────────
-  // To change the password:
-  //   1. Run this in your browser console: crypto.subtle.digest('SHA-256', new TextEncoder().encode('your-new-password')).then(b => console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))
-  //   2. Replace PASSWORD_HASH below with the output.
-  const PASSWORD_HASH    = "62670334880e11495d987a1a6d3a96b73eb7fc2ac4143bf631d522d439e0dfe8";
-  const SESSION_KEY      = "wf_gate_session";
-  const SESSION_DAYS     = 7;
-  // ──────────────────────────────────────────────────────────────────────────
+  const PASSWORD_HASH = "62670334880e11495d987a1a6d3a96b73eb7fc2ac4143bf631d522d439e0dfe8";
+  const SESSION_KEY   = "wf_gate_session";
+  const SESSION_DAYS  = 7;
 
   async function sha256(str) {
     const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
@@ -154,51 +171,67 @@
     }));
   }
 
-  function showWireframes() {
-    document.getElementById("login-view").style.display    = "none";
-    document.getElementById("wireframe-view").style.display = "block";
+  function showBrowser() {
+    document.getElementById("auth-screen").style.display = "none";
+    document.getElementById("browser").style.display     = "flex";
   }
 
-  // Check existing session on load
-  if (isSessionValid()) showWireframes();
+  // ── On load: check session ──────────────────────────────────
+  if (isSessionValid()) showBrowser();
+  else document.getElementById("pw").focus();
 
-  // Password submit
-  document.getElementById("btn-enter").addEventListener("click", async () => {
-    const pw  = document.getElementById("pw").value;
-    const err = document.getElementById("err");
+  // ── Password submit ─────────────────────────────────────────
+  async function tryEnter() {
+    const err  = document.getElementById("err");
+    const pw   = document.getElementById("pw");
     err.style.display = "none";
-    const hash = await sha256(pw);
+    const hash = await sha256(pw.value);
     if (hash === PASSWORD_HASH) {
       storeSession(hash);
-      showWireframes();
+      showBrowser();
     } else {
       err.style.display = "block";
-      document.getElementById("pw").value = "";
-      document.getElementById("pw").focus();
+      pw.value = "";
+      pw.focus();
     }
+  }
+  document.getElementById("btn-enter").addEventListener("click", tryEnter);
+  document.getElementById("pw").addEventListener("keydown", e => { if (e.key === "Enter") tryEnter(); });
+
+  // ── Wireframe select ────────────────────────────────────────
+  const sel    = document.getElementById("wf-select");
+  const frame  = document.getElementById("wf-frame");
+  const empty  = document.getElementById("empty-state");
+  const openBtn = document.getElementById("btn-open-tab");
+
+  sel.addEventListener("change", () => {
+    const url = sel.value;
+    if (!url) {
+      frame.style.display = "none";
+      empty.style.display = "flex";
+      openBtn.disabled    = true;
+      return;
+    }
+    frame.src           = url;
+    frame.style.display = "block";
+    empty.style.display = "none";
+    openBtn.disabled    = false;
   });
 
-  document.getElementById("pw").addEventListener("keydown", e => {
-    if (e.key === "Enter") document.getElementById("btn-enter").click();
+  openBtn.addEventListener("click", () => {
+    if (sel.value) window.open(sel.value, "_blank");
   });
 
-  // Sign out
+  // ── Sign out ────────────────────────────────────────────────
   document.getElementById("btn-signout").addEventListener("click", () => {
     localStorage.removeItem(SESSION_KEY);
-    document.getElementById("wireframe-view").style.display = "none";
-    document.getElementById("login-view").style.display     = "block";
-    document.getElementById("pw").focus();
-  });
-
-  // Copy link buttons
-  document.querySelectorAll(".copy-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      navigator.clipboard.writeText(btn.dataset.url).then(() => {
-        const orig = btn.textContent;
-        btn.textContent = "Copied!";
-        setTimeout(() => btn.textContent = orig, 1500);
-      });
-    });
+    frame.src           = "about:blank";
+    frame.style.display = "none";
+    empty.style.display = "flex";
+    sel.value           = "";
+    document.getElementById("browser").style.display     = "none";
+    document.getElementById("auth-screen").style.display = "flex";
+    setTimeout(() => document.getElementById("pw").focus(), 50);
   });
 </script>
 </body>
